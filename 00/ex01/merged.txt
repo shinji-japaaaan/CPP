@@ -1,0 +1,273 @@
+// File: Contact.cpp
+/* ************************************************************************** */
+
+#include "Contact.hpp"
+
+void Contact::setFirstName(const std::string &firstName) {
+    this->firstName = firstName;
+}
+
+void Contact::setLastName(const std::string &lastName) {
+    this->lastName = lastName;
+}
+
+void Contact::setNickname(const std::string &nickname) {
+    this->nickname = nickname;
+}
+
+void Contact::setPhoneNumber(const std::string &phoneNumber) {
+    this->phoneNumber = phoneNumber;
+}
+
+void Contact::setDarkestSecret(const std::string &darkestSecret) {
+    this->darkestSecret = darkestSecret;
+}
+
+std::string Contact::getFirstName() const {
+    return firstName;
+}
+
+std::string Contact::getLastName() const {
+    return lastName;
+}
+
+std::string Contact::getNickname() const {
+    return nickname;
+}
+
+std::string Contact::getPhoneNumber() const {
+    return phoneNumber;
+}
+
+std::string Contact::getDarkestSecret() const {
+    return darkestSecret;
+}
+
+
+// File: PhoneBook.cpp
+/* ************************************************************************** */
+
+#include "PhoneBook.hpp"
+#include <iostream>
+#include <iomanip>
+#include <limits>
+
+PhoneBook::PhoneBook() : contactCount(0) {}
+
+static std::string truncateField(const std::string &field) {
+    if (field.length() > 10)
+        return field.substr(0, 9) + ".";
+    return field;
+}
+
+void PhoneBook::addContact() {
+    Contact newContact;
+    std::string input;
+
+    std::cout << "First Name: ";
+    std::getline(std::cin, input);
+    if (input.empty()) return;
+    newContact.setFirstName(input);
+
+    std::cout << "Last Name: ";
+    std::getline(std::cin, input);
+    if (input.empty()) return;
+    newContact.setLastName(input);
+
+    std::cout << "Nickname: ";
+    std::getline(std::cin, input);
+    if (input.empty()) return;
+    newContact.setNickname(input);
+
+    std::cout << "Phone Number: ";
+    std::getline(std::cin, input);
+    if (input.empty()) return;
+    newContact.setPhoneNumber(input);
+
+    std::cout << "Darkest Secret: ";
+    std::getline(std::cin, input);
+    if (input.empty()) return;
+    newContact.setDarkestSecret(input);
+
+    if (contactCount < 8)
+        contacts[contactCount++] = newContact;
+    else {
+        for (int i = 1; i < 8; i++)
+            contacts[i - 1] = contacts[i];
+        contacts[7] = newContact;
+    }
+}
+
+void PhoneBook::displayContacts() const {
+    std::cout << "|"
+              << std::setw(10) << "Index" << "|"
+              << std::setw(10) << "First Name" << "|"
+              << std::setw(10) << "Last Name" << "|"
+              << std::setw(10) << "Nickname" << "|" << std::endl;
+
+    for (int i = 0; i < contactCount; i++) {
+        std::cout << "|"
+                  << std::setw(10) << i << "|"
+                  << std::setw(10) << truncateField(contacts[i].getFirstName()) << "|"
+                  << std::setw(10) << truncateField(contacts[i].getLastName()) << "|"
+                  << std::setw(10) << truncateField(contacts[i].getNickname()) << "|"
+                  << std::endl;
+    }
+}
+
+void PhoneBook::searchContact() const {
+    int index;
+
+    if (contactCount == 0) {
+        std::cout << "PhoneBook is empty." << std::endl;
+        return;
+    }
+
+    displayContacts();
+    std::cout << "Enter index: ";
+    std::cin >> index;
+
+    // 入力失敗（数字以外）を検出
+    if (std::cin.fail()) {
+        std::cin.clear(); // エラー状態リセット
+        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); // バッファを捨てる
+        std::cout << "Invalid input. Please enter a number." << std::endl;
+        return;
+    }
+
+    std::cin.ignore();
+
+    if (index < 0 || index >= contactCount) {
+        std::cout << "Invalid index." << std::endl;
+        return;
+    }
+
+    std::cout << "First Name: " << contacts[index].getFirstName() << std::endl;
+    std::cout << "Last Name: " << contacts[index].getLastName() << std::endl;
+    std::cout << "Nickname: " << contacts[index].getNickname() << std::endl;
+    std::cout << "Phone Number: " << contacts[index].getPhoneNumber() << std::endl;
+    std::cout << "Darkest Secret: " << contacts[index].getDarkestSecret() << std::endl;
+}
+
+
+
+
+// File: main.cpp
+/* ************************************************************************** */
+
+#include "PhoneBook.hpp"
+#include <iostream>
+
+int main() {
+    PhoneBook phoneBook;
+    std::string command;
+
+    while (true) {
+        std::cout << "Enter command (ADD, SEARCH, EXIT): ";
+        std::getline(std::cin, command);
+
+        if (command == "ADD")
+            phoneBook.addContact();
+        else if (command == "SEARCH")
+            phoneBook.searchContact();
+        else if (command == "EXIT")
+            break;
+    }
+    return 0;
+}
+
+
+
+// File: Contact.hpp
+/* ************************************************************************** */
+
+#ifndef CONTACT_HPP
+#define CONTACT_HPP
+
+#include <string>
+
+class Contact {
+private:
+    std::string firstName;
+    std::string lastName;
+    std::string nickname;
+    std::string phoneNumber;
+    std::string darkestSecret;
+
+public:
+    void setFirstName(const std::string &firstName);
+    void setLastName(const std::string &lastName);
+    void setNickname(const std::string &nickname);
+    void setPhoneNumber(const std::string &phoneNumber);
+    void setDarkestSecret(const std::string &darkestSecret);
+
+    std::string getFirstName() const;
+    std::string getLastName() const;
+    std::string getNickname() const;
+    std::string getPhoneNumber() const;
+    std::string getDarkestSecret() const;
+};
+
+#endif
+
+
+// File: PhoneBook.hpp
+/* ************************************************************************** */
+
+#ifndef PHONEBOOK_HPP
+#define PHONEBOOK_HPP
+
+#include "Contact.hpp"
+
+class PhoneBook {
+private:
+    Contact contacts[8];
+    int contactCount;
+
+public:
+    PhoneBook();
+    void addContact();
+    void searchContact() const;
+    void displayContacts() const;
+};
+
+#endif
+
+
+// File: Makefile
+# **************************************************************************** #
+
+# コンパイラの設定
+CXX = c++
+CXXFLAGS = -Wall -Wextra -Werror -std=c++98
+
+# ソースファイルとオブジェクトファイルの設定
+SRC = main.cpp PhoneBook.cpp Contact.cpp
+OBJ_DIR = obj
+OBJ = $(SRC:%.cpp=$(OBJ_DIR)/%.o)
+
+NAME = phonebook
+
+# ルール
+all: $(NAME)
+
+$(NAME): $(OBJ)
+	$(CXX) $(OBJ) -o $(NAME)
+
+# オブジェクトファイルをコンパイル
+$(OBJ_DIR)/%.o: %.cpp
+	@mkdir -p $(OBJ_DIR)
+	$(CXX) $(CXXFLAGS) -c $< -o $@
+
+# クリーン
+clean:
+	rm -rf $(OBJ_DIR)
+
+fclean: clean
+	rm -f $(NAME)
+
+re: fclean all
+
+
+
+
