@@ -6,14 +6,11 @@
 /*   By: sishizaw <sishizaw@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/27 18:44:44 by sishizaw          #+#    #+#             */
-/*   Updated: 2025/04/28 22:32:12 by sishizaw         ###   ########.fr       */
+/*   Updated: 2025/05/02 18:13:25 by sishizaw         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "PhoneBook.hpp"
-#include <iostream>
-#include <iomanip>
-#include <limits>
 
 PhoneBook::PhoneBook() : contactCount(0) {}
 
