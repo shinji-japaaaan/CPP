@@ -6,7 +6,7 @@
 /*   By: sishizaw <sishizaw@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/04 06:41:02 by sishizaw          #+#    #+#             */
-/*   Updated: 2025/05/04 06:41:06 by sishizaw         ###   ########.fr       */
+/*   Updated: 2025/05/04 07:22:20 by sishizaw         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,13 +34,17 @@ void replaceInFile(const std::string& filename,
     std::string line;
     while (std::getline(inputFile, line)) {
         size_t pos = 0;
+        std::string result;
         while ((pos = line.find(s1, pos)) != std::string::npos) {
-            line.replace(pos, s1.length(), s2);
-            pos += s2.length();
+            result += line.substr(0, pos) + s2;  // 置き換え部分を追加
+            line = line.substr(pos + s1.length());  // 残りの部分を切り取る
+            pos = 0;  // 次の位置を最初に戻す
         }
-        outputFile << line << std::endl;
+        result += line;  // 残りの部分を追加
+        outputFile << result << std::endl;
     }
 
     inputFile.close();
     outputFile.close();
 }
+
