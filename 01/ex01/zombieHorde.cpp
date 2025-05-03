@@ -6,23 +6,27 @@
 /*   By: sishizaw <sishizaw@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 05:24:04 by sishizaw          #+#    #+#             */
-/*   Updated: 2025/04/29 05:43:41 by sishizaw         ###   ########.fr       */
+/*   Updated: 2025/05/03 06:53:13 by sishizaw         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "Zombie.h"
+#include "Zombie.hpp"
+#include <sstream>
 
 Zombie* zombieHorde(int N, std::string name) {
-    // N体のゾンビを生成する（デフォルトコンストラクタが必要）
     Zombie* horde = new Zombie[N];
 
-    // 各ゾンビに名前を設定する
-    for (int i = 0; i < N; ++i) {
-        horde[i] = Zombie(name);  // 名前を渡してゾンビを生成
+    int i = 0;
+    while (i < N) {
+        std::ostringstream oss;
+        oss << name << i;
+        horde[i] = Zombie(oss.str());
+        i++;
     }
 
     return horde;
 }
+
 
 
 
