@@ -6,7 +6,7 @@
 /*   By: sishizaw <sishizaw@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/04 15:36:01 by sishizaw          #+#    #+#             */
-/*   Updated: 2025/05/04 15:37:32 by sishizaw         ###   ########.fr       */
+/*   Updated: 2025/05/04 20:21:56 by sishizaw         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,20 +37,17 @@ void Harl::error(void)
 	std::cout << "This is unacceptable! I want to speak to the manager now.\n";
 }
 
-void Harl::complain(std::string level)
-{
-	typedef void (Harl::*FuncPtr)();
-	const std::string levels[] = {"DEBUG", "INFO", "WARNING", "ERROR"};
-	FuncPtr funcs[] = {&Harl::debug, &Harl::info, &Harl::warning, &Harl::error};
+void Harl::complain(std::string level) {
+    const std::string levels[] = {"DEBUG", "INFO", "WARNING", "ERROR"};
+    FuncPtr funcs[] = {&Harl::debug, &Harl::info, &Harl::warning, &Harl::error};
 
-	int i = 0;
-	while (i < 4)
-	{
-		if (levels[i] == level)
-		{
-			(this->*funcs[i])();
-			return;
-		}
-		i++;
-	}
+    int i = 0;
+    while (i < 4) {
+        if (levels[i] == level) {
+            (this->*funcs[i])();
+            return;
+        }
+        i++;
+    }
 }
+
