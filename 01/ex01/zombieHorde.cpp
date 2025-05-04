@@ -23,7 +23,6 @@ Zombie* zombieHorde(int N, std::string name) {
         horde[i] = Zombie(oss.str());
         i++;
     }
-
     return horde;
 }
 

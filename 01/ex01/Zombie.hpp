@@ -21,8 +21,8 @@ private:
     std::string name;
 
 public:
-    Zombie();  // デフォルトコンストラクタを追加
-    Zombie(std::string name);  // 名前を受け取るコンストラクタ
+    Zombie();
+    Zombie(std::string name);
     ~Zombie();
     void announce(void) const;
 };

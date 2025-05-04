@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "fileReplacer.hpp"
+#include "FileReplacer.hpp"
 #include <iostream>
 
 int main(int argc, char* argv[]) {

@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "fileReplacer.hpp"
+#include "FileReplacer.hpp"
 #include <iostream>
 #include <fstream>
 
@@ -36,11 +36,11 @@ void replaceInFile(const std::string& filename,
         size_t pos = 0;
         std::string result;
         while ((pos = line.find(s1, pos)) != std::string::npos) {
-            result += line.substr(0, pos) + s2;  // 置き換え部分を追加
-            line = line.substr(pos + s1.length());  // 残りの部分を切り取る
-            pos = 0;  // 次の位置を最初に戻す
+            result += line.substr(0, pos) + s2;
+            line = line.substr(pos + s1.length());
+            pos = 0;
         }
-        result += line;  // 残りの部分を追加
+        result += line;
         outputFile << result << std::endl;
     }
 

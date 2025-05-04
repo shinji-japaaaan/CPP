@@ -13,20 +13,16 @@
 #include "Zombie.hpp"
 
 Zombie::Zombie() : name("") { 
-    // デフォルトコンストラクタ（空の名前で初期化）
 }
 
 Zombie::Zombie(std::string name) : name(name) { 
-    // 名前を受け取るコンストラクタ
 }
 
 Zombie::~Zombie() {
-    // デストラクタでゾンビが破棄されたことを表示
     std::cout << name << " has been destroyed!" << std::endl;
 }
 
 void Zombie::announce(void) const {
-    // ゾンビが自己紹介する
     std::cout << name << ": BraiiiiiiinnnzzzZ..." << std::endl;
 }
 

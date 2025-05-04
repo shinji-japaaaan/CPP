@@ -12,7 +12,7 @@
 
 NAME = sed
 
-SRCS = main.cpp fileReplacer.cpp
+SRCS = main.cpp FileReplacer.cpp
 OBJS = $(SRCS:.cpp=.o)
 CXX = c++
 CXXFLAGS = -Wall -Wextra -Werror -std=c++98

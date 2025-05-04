@@ -6,7 +6,7 @@
 /*   By: sishizaw <sishizaw@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/27 18:44:44 by sishizaw          #+#    #+#             */
-/*   Updated: 2025/05/02 18:13:25 by sishizaw         ###   ########.fr       */
+/*   Updated: 2025/05/04 15:26:15 by sishizaw         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,33 +20,36 @@ static std::string truncateField(const std::string &field) {
     return field;
 }
 
+bool readInput(const std::string &prompt, std::string &output) {
+    std::cout << prompt;
+    if (!std::getline(std::cin, output)) {
+        std::cout << "\nEOF detected during input. Cancelling add.\n";
+        return false;
+    }
+    if (output.empty()) {
+        std::cout << "Field cannot be empty. Cancelling add.\n";
+        return false;
+    }
+    return true;
+}
+
 void PhoneBook::addContact() {
     Contact newContact;
     std::string input;
 
-    std::cout << "First Name: ";
-    std::getline(std::cin, input);
-    if (input.empty()) return;
+    if (!readInput("First Name: ", input)) return;
     newContact.setFirstName(input);
 
-    std::cout << "Last Name: ";
-    std::getline(std::cin, input);
-    if (input.empty()) return;
+    if (!readInput("Last Name: ", input)) return;
     newContact.setLastName(input);
 
-    std::cout << "Nickname: ";
-    std::getline(std::cin, input);
-    if (input.empty()) return;
+    if (!readInput("Nickname: ", input)) return;
     newContact.setNickname(input);
 
-    std::cout << "Phone Number: ";
-    std::getline(std::cin, input);
-    if (input.empty()) return;
+    if (!readInput("Phone Number: ", input)) return;
     newContact.setPhoneNumber(input);
 
-    std::cout << "Darkest Secret: ";
-    std::getline(std::cin, input);
-    if (input.empty()) return;
+    if (!readInput("Darkest Secret: ", input)) return;
     newContact.setDarkestSecret(input);
 
     if (contactCount < 8)
@@ -92,10 +95,9 @@ void PhoneBook::searchContact() const {
     std::cout << "Enter index: ";
     std::cin >> index;
 
-    // 入力失敗（数字以外）を検出
     if (std::cin.fail()) {
-        std::cin.clear(); // エラー状態リセット
-        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); // バッファを捨てる
+        std::cin.clear();
+        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
         std::cout << "Invalid input. Please enter a number." << std::endl;
         return;
     }
