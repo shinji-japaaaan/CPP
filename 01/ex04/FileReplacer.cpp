@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   fileReplacer.cpp                                   :+:      :+:    :+:   */
+/*   FileReplacer.cpp                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: sishizaw <sishizaw@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/04 06:41:02 by sishizaw          #+#    #+#             */
-/*   Updated: 2025/05/04 07:22:20 by sishizaw         ###   ########.fr       */
+/*   Updated: 2025/06/02 20:21:58 by sishizaw         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,11 +23,13 @@ void replaceInFile(const std::string& filename,
         return;
     }
 
-    std::ofstream outputFile((filename + ".replace").c_str());
+    std::string outputFilename = filename + ".replace";
+    std::ofstream outputFile(outputFilename.c_str());
     if (!outputFile.is_open()) {
-        std::cerr << "Error: Could not create output file "
-                  << filename << ".replace" << std::endl;
-        inputFile.close();
+    std::cerr << "Error: Could not create output file "
+              << outputFilename << std::endl;
+    inputFile.close();
+    return;
         return;
     }
 
