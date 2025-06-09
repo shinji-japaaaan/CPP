@@ -6,7 +6,7 @@
 /*   By: sishizaw <sishizaw@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/06 07:00:26 by sishizaw          #+#    #+#             */
-/*   Updated: 2025/06/06 07:00:28 by sishizaw         ###   ########.fr       */
+/*   Updated: 2025/06/10 06:35:59 by sishizaw         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,19 +101,31 @@ int Fixed::toInt() const {
 }
 
 Fixed &Fixed::min(Fixed &a, Fixed &b) {
-	return (a < b ? a : b);
+	if (a < b)
+		return a;
+	else
+		return b;
 }
 
 const Fixed &Fixed::min(const Fixed &a, const Fixed &b) {
-	return (a < b ? a : b);
+	if (a < b)
+		return a;
+	else
+		return b;
 }
 
 Fixed &Fixed::max(Fixed &a, Fixed &b) {
-	return (a > b ? a : b);
+	if (a > b)
+		return a;
+	else
+		return b;
 }
 
 const Fixed &Fixed::max(const Fixed &a, const Fixed &b) {
-	return (a > b ? a : b);
+	if (a > b)
+		return a;
+	else
+		return b;
 }
 
 // Stream operator
