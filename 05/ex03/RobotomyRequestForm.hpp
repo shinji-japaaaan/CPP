@@ -1,38 +1,32 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ClapTrap.hpp                                       :+:      :+:    :+:   */
+/*   RobotomyRequestForm.hpp                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: sishizaw <sishizaw@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/05 21:00:36 by sishizaw          #+#    #+#             */
-/*   Updated: 2025/06/19 21:40:45 by sishizaw         ###   ########.fr       */
+/*   Created: 2025/06/12 21:15:46 by sishizaw          #+#    #+#             */
+/*   Updated: 2025/06/12 21:15:48 by sishizaw         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef CLAPTRAP_HPP
-#define CLAPTRAP_HPP
+#ifndef ROBOTOMYREQUESTFORM_HPP
+#define ROBOTOMYREQUESTFORM_HPP
 
+#include "AForm.hpp"
 #include <string>
-#include <iostream>
 
-class ClapTrap {
-protected:
-	std::string name;
-	int hitPoints;
-	int energyPoints;
-	int attackDamage;
+class RobotomyRequestForm : public AForm {
+private:
+    std::string target_;
 
 public:
-	ClapTrap();
-	ClapTrap(const std::string& name);
-	ClapTrap(const ClapTrap& other);
-	ClapTrap& operator=(const ClapTrap& other);
-	~ClapTrap();
+    RobotomyRequestForm(const std::string& target);
+    RobotomyRequestForm(const RobotomyRequestForm& other);
+    RobotomyRequestForm& operator=(const RobotomyRequestForm& other);
+    ~RobotomyRequestForm();
 
-	void attack(const std::string& target);
-	void takeDamage(unsigned int amount);
-	void beRepaired(unsigned int amount);
+    void execute(Bureaucrat const& executor) const;
 };
 
 #endif

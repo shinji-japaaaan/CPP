@@ -6,7 +6,7 @@
 /*   By: sishizaw <sishizaw@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/05 21:01:05 by sishizaw          #+#    #+#             */
-/*   Updated: 2025/05/05 21:01:06 by sishizaw         ###   ########.fr       */
+/*   Updated: 2025/06/19 21:44:02 by sishizaw         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,8 +44,14 @@ ScavTrap::~ScavTrap() {
 }
 
 void ScavTrap::attack(const std::string& target) {
-    std::cout << "ScavTrap " << name << " launches a fierce attack on " << target
-              << ", dealing " << attackDamage << " damage!" << std::endl;
+    if (energyPoints > 0 && hitPoints > 0) {
+        energyPoints--;
+        std::cout << "ScavTrap " << name << " viciously attacks " << target
+                  << ", dealing " << attackDamage << " points of damage!" << std::endl;
+    } else {
+        std::cout << "ScavTrap " << name
+                  << " can't attack. No energy or hit points left." << std::endl;
+    }
 }
 
 void ScavTrap::guardGate() {
