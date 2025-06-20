@@ -6,7 +6,7 @@
 /*   By: sishizaw <sishizaw@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/07 18:41:51 by sishizaw          #+#    #+#             */
-/*   Updated: 2025/06/07 20:25:32 by sishizaw         ###   ########.fr       */
+/*   Updated: 2025/06/20 20:50:33 by sishizaw         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ int main() {
 
     Dog basic;
     {
-        Dog tmp = basic;
+        Dog tmp(basic);
         std::cout << "Inside block" << std::endl;
     }
     std::cout << "After block" << std::endl;
