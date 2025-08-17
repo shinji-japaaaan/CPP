@@ -64,11 +64,3 @@ void ScalarConverter::convert(const std::string& literal) {
   std::cout << "double: " << std::fixed << std::setprecision(1)
             << static_cast<double>(value) << std::endl;
 }
-
-// private constructor & copy
-ScalarConverter::ScalarConverter() {}
-ScalarConverter::~ScalarConverter() {}
-ScalarConverter::ScalarConverter(const ScalarConverter&) {}
-ScalarConverter& ScalarConverter::operator=(const ScalarConverter&) {
-  return *this;
-}

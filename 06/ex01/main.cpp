@@ -12,6 +12,7 @@ int main() {
     std::cout << "Original.name:         " << original.name << std::endl;
 
     unsigned long raw = Serializer::serialize(&original);
+    std::cout << std::hex << raw << std::endl;
     Data* copy = Serializer::deserialize(raw);
 
     std::cout << "Deserialized pointer:  " << copy << std::endl;
