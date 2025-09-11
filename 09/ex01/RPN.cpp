@@ -34,11 +34,9 @@ int RPN::evaluate(const std::string& expr) {
             values.push(result);
         } else {
             // 数字のチェック
-            for (size_t i = 0; i < token.size(); i++) {
-                if (!isdigit(token[i]))
-                    throw std::runtime_error("Error");
-            }
-            int num = std::atoi(token.c_str());
+            if (token.size() != 1 || !isdigit(token[0]))
+                throw std::runtime_error("Error");
+            int num = token[0] - '0';
             values.push(num);
         }
     }
