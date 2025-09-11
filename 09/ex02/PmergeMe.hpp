@@ -4,7 +4,7 @@
 #include <vector>
 #include <deque>
 
-template<typename T>
-void mergeInsertSort(T& container);
+void fordJohnsonSort(std::vector<int> &vec);
+void fordJohnsonSort(std::deque<int> &deq);
 
 #endif

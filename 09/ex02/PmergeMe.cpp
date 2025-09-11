@@ -1,47 +1,81 @@
 #include "PmergeMe.hpp"
+#include <algorithm>
 
-// 基本的な Ford-Johnson マージ挿入法（簡略版）
-// 本格的に最適化すると複雑になるため簡略化
-template<typename T>
-void mergeInsertSort(T& container) {
-    if (container.size() <= 1) return;
+// -------------------- Vector用 --------------------
+void fordJohnsonSort(std::vector<int> &vec)
+{
+	if (vec.size() <= 1)
+		return;
 
-    typename T::iterator mid = container.begin() + container.size() / 2;
-    T left(container.begin(), mid);
-    T right(mid, container.end());
+	std::vector<int> large, small;
+	for (size_t i = 0; i + 1 < vec.size(); i += 2)
+	{
+		if (vec[i] > vec[i + 1])
+		{
+			large.push_back(vec[i]);
+			small.push_back(vec[i + 1]);
+		}
+		else
+		{
+			large.push_back(vec[i + 1]);
+			small.push_back(vec[i]);
+		}
+	}
+	if (vec.size() % 2 != 0)
+		small.push_back(vec.back());
 
-    mergeInsertSort(left);
-    mergeInsertSort(right);
+	fordJohnsonSort(large);
 
-    // マージ
-    typename T::iterator it = container.begin();
-    typename T::iterator lIt = left.begin();
-    typename T::iterator rIt = right.begin();
+	std::vector<int> sorted;
+	sorted.reserve(vec.size());
+	for (size_t i = 0; i < large.size(); ++i)
+		sorted.push_back(large[i]);
 
-    while (lIt != left.end() && rIt != right.end()) {
-        if (*lIt <= *rIt) {
-            *it = *lIt;
-            ++lIt;
-        } else {
-            *it = *rIt;
-            ++rIt;
-        }
-        ++it;
-    }
+	for (size_t i = 0; i < small.size(); ++i)
+	{
+		std::vector<int>::iterator it =
+			std::lower_bound(sorted.begin(), sorted.end(), small[i]);
+		sorted.insert(it, small[i]);
+	}
 
-    while (lIt != left.end()) {
-        *it = *lIt;
-        ++lIt;
-        ++it;
-    }
-
-    while (rIt != right.end()) {
-        *it = *rIt;
-        ++rIt;
-        ++it;
-    }
+	vec = sorted;
 }
 
-// 明示的インスタンス化
-template void mergeInsertSort<std::vector<int> >(std::vector<int>&);
-template void mergeInsertSort<std::deque<int> >(std::deque<int>&);
+// -------------------- Deque用 --------------------
+void fordJohnsonSort(std::deque<int> &deq)
+{
+	if (deq.size() <= 1)
+		return;
+
+	std::deque<int> large, small;
+	for (size_t i = 0; i + 1 < deq.size(); i += 2)
+	{
+		if (deq[i] > deq[i + 1])
+		{
+			large.push_back(deq[i]);
+			small.push_back(deq[i + 1]);
+		}
+		else
+		{
+			large.push_back(deq[i + 1]);
+			small.push_back(deq[i]);
+		}
+	}
+	if (deq.size() % 2 != 0)
+		small.push_back(deq.back());
+
+	fordJohnsonSort(large);
+
+	std::deque<int> sorted;
+	for (size_t i = 0; i < large.size(); ++i)
+		sorted.push_back(large[i]);
+
+	for (size_t i = 0; i < small.size(); ++i)
+	{
+		std::deque<int>::iterator it =
+			std::lower_bound(sorted.begin(), sorted.end(), small[i]);
+		sorted.insert(it, small[i]);
+	}
+
+	deq = sorted;
+}
