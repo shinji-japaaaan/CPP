@@ -13,10 +13,10 @@ int main(int argc, char **argv)
 		return 1;
 	}
 
-	std::vector<int> vec;
-	std::deque<int> deq;
+	// -------------------- vector用 --------------------
+	clock_t startVec = clock();
 
-	// 引数を整数に変換
+	std::vector<int> vec;
 	for (int i = 1; i < argc; ++i)
 	{
 		std::istringstream iss(argv[i]);
@@ -27,28 +27,40 @@ int main(int argc, char **argv)
 			return 1;
 		}
 		vec.push_back(num);
+	}
+
+	fordJohnsonSort(vec);
+
+	clock_t endVec = clock();
+	double vecTime = double(endVec - startVec) / CLOCKS_PER_SEC * 1000000;
+
+	// -------------------- deque用 --------------------
+	clock_t startDeq = clock();
+
+	std::deque<int> deq;
+	for (int i = 1; i < argc; ++i)
+	{
+		std::istringstream iss(argv[i]);
+		int num;
+		if (!(iss >> num) || num <= 0)
+		{
+			std::cerr << "Error" << std::endl;
+			return 1;
+		}
 		deq.push_back(num);
 	}
 
-	// Before表示
+	fordJohnsonSort(deq);
+
+	clock_t endDeq = clock();
+	double deqTime = double(endDeq - startDeq) / CLOCKS_PER_SEC * 1000000;
+
+	// -------------------- Before / After 表示 --------------------
 	std::cout << "Before: ";
-	for (size_t i = 0; i < vec.size(); ++i)
-		std::cout << vec[i] << " ";
+	for (int i = 1; i < argc; ++i)
+		std::cout << argv[i] << " ";
 	std::cout << std::endl;
 
-	// vectorでFord-Johnsonソート
-	clock_t start = clock();
-	fordJohnsonSort(vec);
-	clock_t end = clock();
-	double vecTime = double(end - start) / CLOCKS_PER_SEC * 1000000;
-
-	// dequeでFord-Johnsonソート
-	start = clock();
-	fordJohnsonSort(deq);
-	end = clock();
-	double deqTime = double(end - start) / CLOCKS_PER_SEC * 1000000;
-
-	// After表示
 	std::cout << "After: ";
 	for (size_t i = 0; i < vec.size(); ++i)
 		std::cout << vec[i] << " ";
