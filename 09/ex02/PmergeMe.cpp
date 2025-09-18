@@ -1,81 +1,149 @@
 #include "PmergeMe.hpp"
+#include <vector>
+#include <deque>
 #include <algorithm>
+#include <iterator>
 
-// -------------------- Vector用 --------------------
-void fordJohnsonSort(std::vector<int> &vec)
-{
-	if (vec.size() <= 1)
-		return;
+// ------------------------ Jacobstahl 配列 ------------------------
+const size_t Jacobsthal[] = {1, 3, 5, 11, 21, 43, 85, 171, 341, 683,
+                                    1365, 2731, 5461, 10923, 21845, 43691,
+                                    87381, 174763, 349525, 699051, 1398101,
+                                    2796203, 5592405, 11184811, 22369621,
+                                    44739243, 89478485, 178956971, 357913941,
+                                    715827883, 1431655765};
 
-	std::vector<int> large, small;
-	for (size_t i = 0; i + 1 < vec.size(); i += 2)
-	{
-		if (vec[i] > vec[i + 1])
-		{
-			large.push_back(vec[i]);
-			small.push_back(vec[i + 1]);
-		}
-		else
-		{
-			large.push_back(vec[i + 1]);
-			small.push_back(vec[i]);
-		}
-	}
-	if (vec.size() % 2 != 0)
-		small.push_back(vec.back());
+// ------------------------ 比較用ファンクタ ------------------------
+struct PairCompare {
+    bool operator()(const std::pair<int,int> &x, const std::pair<int,int> &y) const {
+        return x.second < y.second;
+    }
+};
 
-	fordJohnsonSort(large);
-
-	std::vector<int> sorted;
-	sorted.reserve(vec.size());
-	for (size_t i = 0; i < large.size(); ++i)
-		sorted.push_back(large[i]);
-
-	for (size_t i = 0; i < small.size(); ++i)
-	{
-		std::vector<int>::iterator it =
-			std::lower_bound(sorted.begin(), sorted.end(), small[i]);
-		sorted.insert(it, small[i]);
-	}
-
-	vec = sorted;
+// ------------------------ 内部ユーティリティ ------------------------
+void binarySearchInsertVec(std::vector<int> &mainChain,
+                                  std::vector<int>::iterator end, int val) {
+    std::vector<int>::iterator it = std::lower_bound(mainChain.begin(), end, val);
+    mainChain.insert(it, val);
 }
 
-// -------------------- Deque用 --------------------
-void fordJohnsonSort(std::deque<int> &deq)
-{
-	if (deq.size() <= 1)
-		return;
+void binarySearchInsertDeq(std::deque<int> &mainChain,
+                                  std::deque<int>::iterator end, int val) {
+    std::deque<int>::iterator it = std::lower_bound(mainChain.begin(), end, val);
+    mainChain.insert(it, val);
+}
 
-	std::deque<int> large, small;
-	for (size_t i = 0; i + 1 < deq.size(); i += 2)
-	{
-		if (deq[i] > deq[i + 1])
-		{
-			large.push_back(deq[i]);
-			small.push_back(deq[i + 1]);
-		}
-		else
-		{
-			large.push_back(deq[i + 1]);
-			small.push_back(deq[i]);
-		}
-	}
-	if (deq.size() % 2 != 0)
-		small.push_back(deq.back());
+// ------------------------ Ford–Johnson ソート (vector用) ------------------------
+void fordJohnsonSortVec(std::vector<int> &input) {
+    if (input.size() <= 1) return;
 
-	fordJohnsonSort(large);
+    typedef std::pair<int,int> Pair;
+    std::vector<Pair> pairs;
 
-	std::deque<int> sorted;
-	for (size_t i = 0; i < large.size(); ++i)
-		sorted.push_back(large[i]);
+    for (size_t i = 0; i + 1 < input.size(); i += 2) {
+        int a = input[i], b = input[i + 1];
+        if (a > b) std::swap(a, b);
+        pairs.push_back(Pair(a,b));
+    }
 
-	for (size_t i = 0; i < small.size(); ++i)
-	{
-		std::deque<int>::iterator it =
-			std::lower_bound(sorted.begin(), sorted.end(), small[i]);
-		sorted.insert(it, small[i]);
-	}
+    int additional = -1;
+    if (input.size() % 2 == 1) additional = input.back();
 
-	deq = sorted;
+    std::sort(pairs.begin(), pairs.end(), PairCompare());
+
+    std::vector<int> mainChain;
+    for (size_t i = 0; i < pairs.size(); ++i) mainChain.push_back(pairs[i].second);
+    if (!pairs.empty()) mainChain.insert(mainChain.begin(), pairs[0].first);
+
+    size_t jacobIdx = 1;
+    std::vector<Pair>::iterator lastJacobIt = pairs.begin();
+
+    while (Jacobsthal[jacobIdx] <= pairs.size()) {
+        std::vector<Pair>::iterator pairIt = pairs.begin() + (Jacobsthal[jacobIdx] - 1);
+        lastJacobIt = pairIt;
+        int inserted = 0;
+        while (Jacobsthal[jacobIdx] - inserted > Jacobsthal[jacobIdx-1]) {
+            std::vector<int>::iterator sliceEnd = 
+                std::find(mainChain.begin(), mainChain.end(), pairIt->second);
+            binarySearchInsertVec(mainChain, sliceEnd, pairIt->first);
+            --pairIt;
+            ++inserted;
+        }
+        ++jacobIdx;
+    }
+
+    if (Jacobsthal[jacobIdx-1] != pairs.size()) {
+        std::vector<Pair>::iterator pairIt = pairs.end();
+        if (pairIt != pairs.begin()) --pairIt;
+        while (pairIt != lastJacobIt) {
+            std::vector<int>::iterator sliceEnd = 
+                std::find(mainChain.begin(), mainChain.end(), pairIt->second);
+            binarySearchInsertVec(mainChain, sliceEnd, pairIt->first);
+            --pairIt;
+        }
+    }
+
+    if (additional != -1) binarySearchInsertVec(mainChain, mainChain.end(), additional);
+
+    size_t idx = 0;
+    for (std::vector<int>::iterator it = input.begin(); it != input.end(); ++it, ++idx) {
+        *it = mainChain[idx];
+    }
+}
+
+// ------------------------ Ford–Johnson ソート (deque用) ------------------------
+void fordJohnsonSortDeq(std::deque<int> &input) {
+    if (input.size() <= 1) return;
+
+    typedef std::pair<int,int> Pair;
+    std::vector<Pair> pairs;
+
+    for (size_t i = 0; i + 1 < input.size(); i += 2) {
+        int a = input[i], b = input[i + 1];
+        if (a > b) std::swap(a, b);
+        pairs.push_back(Pair(a,b));
+    }
+
+    int additional = -1;
+    if (input.size() % 2 == 1) additional = input.back();
+
+    std::sort(pairs.begin(), pairs.end(), PairCompare());
+
+    std::deque<int> mainChain;
+    for (size_t i = 0; i < pairs.size(); ++i) mainChain.push_back(pairs[i].second);
+    if (!pairs.empty()) mainChain.push_front(pairs[0].first);
+
+    size_t jacobIdx = 1;
+    std::vector<Pair>::iterator lastJacobIt = pairs.begin();
+
+    while (Jacobsthal[jacobIdx] <= pairs.size()) {
+        std::vector<Pair>::iterator pairIt = pairs.begin() + (Jacobsthal[jacobIdx] - 1);
+        lastJacobIt = pairIt;
+        int inserted = 0;
+        while (Jacobsthal[jacobIdx] - inserted > Jacobsthal[jacobIdx-1]) {
+            std::deque<int>::iterator sliceEnd = 
+                std::find(mainChain.begin(), mainChain.end(), pairIt->second);
+            binarySearchInsertDeq(mainChain, sliceEnd, pairIt->first);
+            --pairIt;
+            ++inserted;
+        }
+        ++jacobIdx;
+    }
+
+    if (Jacobsthal[jacobIdx-1] != pairs.size()) {
+        std::vector<Pair>::iterator pairIt = pairs.end();
+        if (pairIt != pairs.begin()) --pairIt;
+        while (pairIt != lastJacobIt) {
+            std::deque<int>::iterator sliceEnd = 
+                std::find(mainChain.begin(), mainChain.end(), pairIt->second);
+            binarySearchInsertDeq(mainChain, sliceEnd, pairIt->first);
+            --pairIt;
+        }
+    }
+
+    if (additional != -1) binarySearchInsertDeq(mainChain, mainChain.end(), additional);
+
+    size_t idx = 0;
+    for (std::deque<int>::iterator it = input.begin(); it != input.end(); ++it, ++idx) {
+        *it = mainChain[idx];
+    }
 }
