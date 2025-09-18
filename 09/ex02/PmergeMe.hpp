@@ -3,8 +3,10 @@
 
 #include <vector>
 #include <deque>
+#include <cstddef>
 
-void fordJohnsonSort(std::vector<int> &vec);
-void fordJohnsonSort(std::deque<int> &deq);
+// ------------------------ 関数宣言 ------------------------
+void fordJohnsonSortVec(std::vector<int> &input);
+void fordJohnsonSortDeq(std::deque<int> &input);
 
 #endif
