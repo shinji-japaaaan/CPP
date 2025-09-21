@@ -3,10 +3,44 @@
 
 #include <vector>
 #include <deque>
-#include <cstddef>
+#include <iostream>
+#include <sstream>
+#include <ctime>
+#include <sys/time.h>
 
-// ------------------------ 関数宣言 ------------------------
-void fordJohnsonSortVec(std::vector<int> &input);
-void fordJohnsonSortDeq(std::deque<int> &input);
+class PmergeMe {
+private:
+    std::vector<int> _inputData;
+
+    // Jacobsthal sequence generation (using basic loops, no algorithm header)
+    std::vector<int> generateJacobsthalSequence(int n) const;
+    
+
+    // Binary search implementation (no algorithm header)
+    int binarySearchVector(const std::vector<int>& vec, int value, int left, int right) const;
+    int binarySearchDeque(const std::deque<int>& deq, int value, int left, int right) const;
+
+    // Ford-Johnson algorithm implementations
+    std::vector<int> fordJohnsonVector(const std::vector<int>& arr) const;
+    std::deque<int> fordJohnsonDeque(const std::deque<int>& arr) const;
+
+    // Utility functions
+    bool isValidNumber(const std::string& str) const;
+    double getTimeInMicroseconds() const;
+
+public:
+    // Orthodox Canonical Form
+    PmergeMe();
+    PmergeMe(const PmergeMe& other);
+    PmergeMe& operator=(const PmergeMe& other);
+    ~PmergeMe();
+
+    // Main functionality
+    bool parseInput(int argc, char** argv);
+    void execute();
+
+    std::vector<int> generateInsertionOrder(int n) const;
+
+};
 
 #endif
