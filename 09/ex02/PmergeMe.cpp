@@ -172,16 +172,6 @@ std::vector<int> PmergeMe::fordJohnsonVector(const std::vector<int>& arr) const 
 			order.erase(order.begin());
 		}
 
-		 std::cout << "DEBUG: insertion order indices: ";
-		for (size_t i = 0; i < order.size(); ++i)
-			std::cout << order[i] << " ";
-		std::cout << std::endl;
-
-		std::cout << "DEBUG: pend elements before insertion: ";
-		for (size_t i = 0; i < pend.size(); ++i)
-			std::cout << pend[i] << " ";
-		std::cout << std::endl;
-
 		for (size_t k = 0; k < order.size(); ++k) {
 			int idx = order[k];  // actualIdx = idx のまま使う
 			if (idx < (int)pend.size()) {
@@ -199,13 +189,6 @@ std::vector<int> PmergeMe::fordJohnsonVector(const std::vector<int>& arr) const 
 
 				int pos = binarySearchVector(finalResult, val, 0, limitPos - 1);
 				finalResult.insert(finalResult.begin() + pos, val);
-
-				// 挿入後の状態を出力
-				std::cout << "DEBUG: insert " << val << " at pos " << pos
-						<< ", finalResult: ";
-				for (size_t n = 0; n < finalResult.size(); ++n)
-					std::cout << finalResult[n] << " ";
-				std::cout << std::endl;
 			}
 		}
 	}
