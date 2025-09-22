@@ -3,6 +3,23 @@
 #include <sstream>
 #include <iostream>
 
+// デフォルトコンストラクタ
+BitcoinExchange::BitcoinExchange() : priceMap() {}
+
+// コピーコンストラクタ
+BitcoinExchange::BitcoinExchange(const BitcoinExchange &other) : priceMap(other.priceMap) {}
+
+// コピー代入演算子
+BitcoinExchange &BitcoinExchange::operator=(const BitcoinExchange &other) {
+    if (this != &other) {
+        priceMap = other.priceMap;
+    }
+    return *this;
+}
+
+// デストラクタ
+BitcoinExchange::~BitcoinExchange() {}
+
 bool BitcoinExchange::loadPriceDatabase(const std::string &filename) {
     std::ifstream file(filename.c_str()); // c_str()を使う
     if (!file.is_open())
@@ -34,12 +51,25 @@ bool BitcoinExchange::loadPriceDatabase(const std::string &filename) {
 
 double BitcoinExchange::getPriceForDate(const std::string &date) const {
     std::map<std::string, double>::const_iterator it = priceMap.lower_bound(date);
+
+    // 完全一致した場合
     if (it != priceMap.end() && it->first == date) {
         return it->second;
     }
+
+    // すべてのデータよりも前の日付だった場合
     if (it == priceMap.begin()) {
-        return -1.0;
+        return -1.0;  // データなしを示す
     }
+
+    // すべてのデータよりも後の日付だった場合
+    if (it == priceMap.end()) {
+        --it;  // 最後の要素に移動
+        return it->second;
+    }
+
+    // 途中の日付の場合 → 直前の要素を返す
     --it;
     return it->second;
 }
+

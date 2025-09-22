@@ -4,16 +4,38 @@
 #include <sstream>
 #include <string>
 #include <limits>
+#include <cstdlib>
 
 bool isValidDate(const std::string &date) {
-    // シンプルに YYYY-MM-DD の形式か確認するだけ（詳細チェックは省略）
-    if (date.size() != 10) return false;
-    if (date[4] != '-' || date[7] != '-') return false;
-    for (size_t i = 0; i < date.size(); ++i) {
-        if (i == 4 || i == 7) continue;
-        if (!isdigit(date[i]))
-            return false;
+    if (date.size() != 10 || date[4] != '-' || date[7] != '-') {
+        return false;
     }
+
+    int year = atoi(date.substr(0, 4).c_str());
+    int month = atoi(date.substr(5, 2).c_str());
+    int day = atoi(date.substr(8, 2).c_str());
+
+    // 年が0以下は不正
+    if (year <= 0) return false;
+
+    // 月の範囲
+    if (month < 1 || month > 12) return false;
+
+    // 月ごとの最大日数
+    int daysInMonth[] = {0,
+        31, 28, 31, 30, 31, 30,
+        31, 31, 30, 31, 30, 31
+    };
+
+    // うるう年なら2月は29日
+    if (month == 2) {
+        bool leap = (year % 4 == 0 && year % 100 != 0) || (year % 400 == 0);
+        if (leap) daysInMonth[2] = 29;
+    }
+
+    // 日の範囲
+    if (day < 1 || day > daysInMonth[month]) return false;
+
     return true;
 }
 
