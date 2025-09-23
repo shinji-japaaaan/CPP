@@ -258,22 +258,26 @@ std::deque<int> PmergeMe::fordJohnsonDeque(const std::deque<int>& arr) const {
     }
 
     if (pend.size() > 1) {
-        std::vector<int> order = generateInsertionOrder(pend.size() - 1);
-        for (std::vector<int>::size_type k = 0; k < order.size(); ++k) {
+        // vector 版と同じように Jacobsthal 挿入順序を生成
+        std::vector<int> order = generateInsertionOrder(pend.size());
+        
+        if (!order.empty()) order.erase(order.begin());
+
+        for (size_t k = 0; k < order.size(); ++k) {
             int idx = order[k];
-            int actualIdx = idx + 1;
-            if (actualIdx < static_cast<int>(pend.size())) {
-                int val = pend[actualIdx];
+            if (idx < (int)pend.size()) {
+                int val = pend[idx];
                 int limitPos = finalResult.size();
-                if (actualIdx < static_cast<int>(mainChain.size())) {
-                    for (std::deque<int>::size_type m = 0;
-                         m < finalResult.size(); ++m) {
-                        if (finalResult[m] == mainChain[actualIdx]) {
+
+                if (idx < (int)mainChain.size()) {
+                    for (size_t m = 0; m < finalResult.size(); ++m) {
+                        if (finalResult[m] == mainChain[idx]) {
                             limitPos = m;
                             break;
                         }
                     }
                 }
+
                 int pos = binarySearchDeque(finalResult, val, 0, limitPos - 1);
                 finalResult.insert(finalResult.begin() + pos, val);
             }
@@ -309,7 +313,7 @@ bool PmergeMe::parseInput(int argc, char** argv) {
 
         // 重複チェック
         if (seen.find(num) != seen.end()) {
-            std::cerr << "Error: duplicate value " << num << std::endl;
+            std::cerr << "Error" << num << std::endl;
             return false;
         }
         seen.insert(num);
