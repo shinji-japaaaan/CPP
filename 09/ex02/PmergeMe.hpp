@@ -27,6 +27,7 @@ private:
     // Utility functions
     bool isValidNumber(const std::string& str) const;
     double getTimeInMicroseconds() const;
+    std::vector<int> generateInsertionOrder(int n) const;
 
 public:
     // Orthodox Canonical Form
@@ -38,9 +39,6 @@ public:
     // Main functionality
     bool parseInput(int argc, char** argv);
     void execute();
-
-    std::vector<int> generateInsertionOrder(int n) const;
-
 };
 
 #endif

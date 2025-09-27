@@ -164,16 +164,14 @@ std::vector<int> PmergeMe::fordJohnsonVector(const std::vector<int>& arr) const 
     }
 
     if (pend.size() > 1) {
-		// pend.size() を渡す
 		std::vector<int> order = generateInsertionOrder(pend.size());
 
-		// 先頭の 0 を削除
 		if (!order.empty()) {
 			order.erase(order.begin());
 		}
 
 		for (size_t k = 0; k < order.size(); ++k) {
-			int idx = order[k];  // actualIdx = idx のまま使う
+			int idx = order[k];
 			if (idx < (int)pend.size()) {
 				int val = pend[idx];
 				int limitPos = finalResult.size();
@@ -258,7 +256,6 @@ std::deque<int> PmergeMe::fordJohnsonDeque(const std::deque<int>& arr) const {
     }
 
     if (pend.size() > 1) {
-        // vector 版と同じように Jacobsthal 挿入順序を生成
         std::vector<int> order = generateInsertionOrder(pend.size());
         
         if (!order.empty()) order.erase(order.begin());
@@ -313,7 +310,7 @@ bool PmergeMe::parseInput(int argc, char** argv) {
 
         // 重複チェック
         if (seen.find(num) != seen.end()) {
-            std::cerr << "Error" << num << std::endl;
+            std::cerr << "Error" << std::endl;
             return false;
         }
         seen.insert(num);
